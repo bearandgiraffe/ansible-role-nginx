@@ -1,7 +1,7 @@
 ---
 - name: Add config for test site
-   template: src=nginx_php.conf.j2 dest=/etc/nginx/sites-available/test_site owner=root group=root
-   notify: restart nginx
+  template: src=nginx_php.conf.j2 dest=/etc/nginx/sites-available/test_site owner=root group=root
+  notify: restart nginx
 
 - name: Enable "test site" Site Config
   file: src=/etc/nginx/sites-available/test_site dest=/etc/nginx/sites-enabled/test_site state=link
