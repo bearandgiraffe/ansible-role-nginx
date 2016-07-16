@@ -1,0 +1,10 @@
+---
+- name: Enable "testWebsite" Site Config
+  file: src=/etc/nginx/sites-available/test_site dest=/etc/nginx/sites-enabled/test_site state=link
+  notify: restart nginx
+
+- name: Delete the Default index page in Nginx
+  file: dest=/var/www/html/index.nginx-debian.html state=absent
+
+- name: Copy the modified index page in Nginx
+  template: src=index.php.j2 dest=/var/www/html/index.php owner=www-data group=www-data

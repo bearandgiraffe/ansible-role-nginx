@@ -1,2 +1,43 @@
 ---
-# tasks file for ansible-role-nginx
+- name: Install the nginx Repository
+  apt_repository: repo='ppa:nginx/stable' state=present
+  register: ppainstalled
+
+- name: Update the Repositories
+  apt: update_cache=true
+
+- name: Install nginx
+  apt: name=nginx
+  tags: nginx
+
+- name: Disable default nginx site
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  notify: restart nginx
+  tags: nginx
+
+- name: Copy nginx configuration
+  template: src={{ nginx_server_type }}.conf.j2 dest=/etc/nginx/sites-available/{{ nginx_server_name }}.conf
+  notify: restart nginx
+  tags: nginx
+
+- name: Symlink nginx configuration
+  file: src=/etc/nginx/sites-available/{{ nginx_server_name }}.conf dest=/etc/nginx/sites-enabled/{{ nginx_server_name }}.conf state=link
+  notify: restart nginx
+  tags: nginx
+
+- name: Create nginx.conf
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify: restart nginx
+  tags: nginx
+
+- name: Create certificates directory
+  file: path={{ nginx_ssl_certificate_path|dirname }} recurse=yes state=directory
+  tags: nginx
+
+- name: Create self-signed SSL cert
+  command: openssl req -new -nodes -x509 -subj "/C=US/ST=California/L=MountainView/O=IT/CN=${ nginx_server_name }" -days 3650 -keyout {{ nginx_ssl_certificate_key_path }} -out {{ nginx_ssl_certificate_path }} -extensions v3_ca creates={{ nginx_ssl_certificate_path }}
+  notify: restart nginx
+  tags: nginx
+
+- include: 10-php.yml
+  when: nginx_server_type == "nginx_php"
