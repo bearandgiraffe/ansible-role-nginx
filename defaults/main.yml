@@ -21,7 +21,7 @@ nginx_server_name:              localhost
 nginx_ssl_certificate_path:     '/etc/nginx/ssl/{{ nginx_server_name }}.crt'
 nginx_ssl_certificate_key_path: '/etc/nginx/ssl/{{ nginx_server_name }}.key'
 
-nginx_puma_bind_path:             'unix://{{ nginx_app_temp_path }}/sockets/puma.{{ nginx_app_env }}.sock'
+nginx_puma_bind_path:           'unix://{{ nginx_app_temp_path }}/sockets/puma.{{ nginx_app_env }}.sock'
 
 nginx_db_user:      vagrant
 nginx_db_password:  vagrant

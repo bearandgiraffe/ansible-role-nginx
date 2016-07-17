@@ -34,7 +34,7 @@ nginx_server_name:              localhost
 nginx_ssl_certificate_path:     '/etc/nginx/ssl/{{ nginx_server_name }}.crt'
 nginx_ssl_certificate_key_path: '/etc/nginx/ssl/{{ nginx_server_name }}.key'
 
-nginx_puma_bind_path:             'unix://{{ nginx_app_temp_path }}/sockets/puma.{{ nginx_app_env }}.sock'
+nginx_puma_bind_path:           'unix://{{ nginx_app_temp_path }}/sockets/puma.{{ nginx_app_env }}.sock'
 ```
 
 This role is setup to work with any web server you'd want to use with nginx, it is also currently to work with a ruby environment and a php environment. The default is set to use `puma` for a ruby environment. To switch to something else you can change the value of `nginx_server_type` as follows:
